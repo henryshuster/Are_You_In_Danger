@@ -15,3 +15,9 @@ app.get('/', function(request, response){
   response.setHeader('Content-Type', 'text/html')
   response.render('index');
 });
+
+app.get('/incident/:id', function(request,response){
+  response.status(200);
+  response.setHeader('Content-Type', 'text/html')
+  response.render('incident');
+});
