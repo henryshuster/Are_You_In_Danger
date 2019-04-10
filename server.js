@@ -21,3 +21,9 @@ app.get('/incident/:id', function(request,response){
   response.setHeader('Content-Type', 'text/html')
   response.render('incident');
 });
+
+app.get('/save', function(request,response){
+  response.status(200);
+  response.setHeader('Content-Type', 'text/html')
+  response.render('incident');
+});
