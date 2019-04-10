@@ -21,3 +21,17 @@ res.status(200);
 res.setHeader('Content-Type', 'text/html');
 res.render('account', user:user);
 });
+
+router.get('/users/:id/login', function(req,res){
+
+res.status(200);
+res.setHeader('Content-Type', 'text/html');
+res.render('index');
+});
+
+router.get('/users/logout', function(req,res){
+
+res.status(200);
+res.setHeader('Content-Type', 'text/html');
+res.render('account');
+});
