@@ -35,3 +35,5 @@ res.status(200);
 res.setHeader('Content-Type', 'text/html');
 res.render('account');
 });
+
+module.exports = router;

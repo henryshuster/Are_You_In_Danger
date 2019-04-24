@@ -5,6 +5,8 @@ var app = express();
 
 var port = 3000;
 
+app.use(require('./controllers/users'));
+
 app.listen(port, function(){
   console.log('Server started at '+ new Date()+', on port ' + port+'!');
 });
