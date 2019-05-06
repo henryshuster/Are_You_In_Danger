@@ -18,7 +18,7 @@ app.listen(port, function(){
 });
 
 app.get('/', function(request, response){
-  console.log('Request- default route');
+  console.log('GET Request- Index');
   response.status(200);
   response.setHeader('Content-Type', 'text/html')
   response.render('index');
