@@ -5,14 +5,14 @@ router.get('/users/create', function(req,res){
 
 res.status(200);
 res.setHeader('Content-Type', 'text/html');
-res.render('account');
+res.render('account', {input_type:0, feedback:0});
 });
 
 router.get('/users/login', function(req,res){
 
 res.status(200);
 res.setHeader('Content-Type', 'text/html');
-res.render('account');
+res.render('account', {input_type:1, feedback:0});
 });
 
 router.post('/users/:id/create', function(req,res){
