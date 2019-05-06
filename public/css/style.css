@@ -1,0 +1,23 @@
+#feedback{
+  height: 22px;
+  font-weight: bold;
+  font-size: 12px;
+  text-align: left;
+  padding:5px;
+}
+.negative {
+  background-color: #ffb7b2;
+  border-left-style: solid;
+  border-color: red;
+}
+.positive {
+  background-color: #abeab6;
+  border-left-style: solid;
+  border-color: green;
+}
+.hidden{
+  display: none;
+}
+.visible{
+  display:block;
+}

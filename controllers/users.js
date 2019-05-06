@@ -19,7 +19,7 @@ router.post('/users/:id/create', function(req,res){
 var user=0;
 res.status(200);
 res.setHeader('Content-Type', 'text/html');
-res.render('account', user:user);
+res.render('account');
 });
 
 router.get('/users/:id/login', function(req,res){
