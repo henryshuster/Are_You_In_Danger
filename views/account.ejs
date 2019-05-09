@@ -64,16 +64,19 @@
               Please fill in an email and password to continue.
             </div>
           <%}%>
-          <form action="/key/user" method="post">
-            <input type="email" class="form-control" id="email" name="email" text-anchor="middle" style="width: 100%;" placeholder="Email address">
-            <input type="password" class="form-control" id="password" name="password" style="width: 100%;" placeholder="Password">
-            <%if (input_type==0){%>
+          <%if (input_type==0){%>
+            <form action="/users/:id/create" method="post">
+              <input type="email" class="form-control" id="email" name="email" text-anchor="middle" style="width: 100%;" placeholder="Email address">
+              <input type="password" class="form-control" id="password" name="password" style="width: 100%;" placeholder="Password">
               <button id ="user_create_submit" type="submit" class="btn btn-secondary">Create Account</button>
-            <%} else if (input_type==1){%>
+            </form>
+          <%} else if (input_type==1){%>
+            <form action="/users/:id/login" method="post">
+              <input type="email" class="form-control" id="email" name="email" text-anchor="middle" style="width: 100%;" placeholder="Email address">
+              <input type="password" class="form-control" id="password" name="password" style="width: 100%;" placeholder="Password">
               <button id ="user_login_submit" type="submit" class="btn btn-secondary">Log In</button>
-            <%}%>
-
-          </form>
+            </form>
+          <%}%>
         </div>
         <p>Developed by: Tyler Masuyama, Brawner Quan, and Henry Shuster.</p>
       </div>
