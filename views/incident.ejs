@@ -8,12 +8,14 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
+    <link rel="shortcut icon" type="image/png" href="../../../images/warning_logo.png"/>
     <title>Are You In Danger?</title>
 
     <meta charset='utf-8' />
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.css' rel='stylesheet' />
+    <link rel="stylesheet" href="../css/style.css">
     <style>
     body { margin:0; padding:0; }
     #map { position:absolute; top:0; bottom:0; width:100%; }
@@ -24,21 +26,17 @@
     <header>
       <!-- Fixed navbar -->
       <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-        <a class="navbar-brand" href="/home">Are You in Danger?</a>
+        <a class="navbar-brand" href="/home/<%=user.email%>">Are You in Danger?</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-              <a class="nav-link" href="/home">Home<span class="sr-only">(current)</span></a>
-            </li>
-            <!-- IF LOGGED IN THEN REMOVE NEW USER/LOG IN LINKS -->
-            <li class="nav-item">
-              <a class="nav-link" href="/users/create">New User</a>
+              <a class="nav-link" href="/home/<%=user.email%>">Home<span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/users/login">Log In</a>
+              <a class="nav-link" href="/users/logout">Log Out</a>
             </li>
           </ul>
           <!-- <form class="form-inline mt-2 mt-md-0">
@@ -55,7 +53,16 @@
       <br>
       <div class="container">
         <h1 class="mt-5">Are You in Danger?</h1>
-        <p class="lead">Shooting/Arrest #XXX</p>
+        <%if (incident_type==0){%>
+            <p class="lead">Shooting #XXX</p>
+        <%}else if(incident_type==1){%>
+            <p class="lead">Arrest #XXX</p>
+        <%}%>
+        <%if (save_feedback==1){%>
+            <div id="feedback" class = "positive">
+              The data for this incident has been saved to your account.
+            </div>
+        <%}%>
         <div class="my-3 p-3 bg-white rounded shadow-sm" id=pleasework>
           <h6 class="border-bottom border-gray pb-2 mb-0">Incident Information</h6>
           <div class="media text-muted pt-3">
@@ -105,6 +112,12 @@
         <p>Developed by: Tyler Masuyama, Brawner Quan, and Henry Shuster.</p>
       </div>
     </main>
+
+    <script>
+      document.getElementById("save_incident_button").addEventListener("click",function(){
+        document.location.href = '/incident/save';
+      });
+    </script>
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>

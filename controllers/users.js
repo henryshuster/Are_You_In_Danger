@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 
+var active_account="hey2";
+
 router.get('/users/create', function(req,res){
   console.log("GET Request: /users/create");
   res.status(200);
@@ -15,7 +17,7 @@ router.get('/users/login', function(req,res){
   res.render('account', {input_type:1, feedback:0});
 });
 
-router.post('/users/:id/create', function(req,res){
+router.post('/users/create/redirect', function(req,res){
   console.log("POST Request: /users/:id/create");
   var user = {
     "email": req.body.email,
@@ -30,15 +32,15 @@ router.post('/users/:id/create', function(req,res){
   }
   else{
     console.log("New user: "+user.email);
+    active_account=user.email;
     res.status(200);
     res.setHeader('Content-Type', 'text/html');
-    res.render('index');
+    res.render('index', {user});
   }
 });
 
-router.post('/users/:id/login', function(req,res){
+router.post('/users/login/redirect', function(req,res){
   console.log("POST Request: /users/:id/login");
-  console.log(req.body.email)
   var user = {
     "email": req.body.email,
     "password": req.body.password,
@@ -52,16 +54,23 @@ router.post('/users/:id/login', function(req,res){
   }
   else{
     console.log("User log in successful: "+user.email);
+    active_account=user.email;
     res.status(200);
     res.setHeader('Content-Type', 'text/html');
-    res.render('index');
+    res.render('index', {user});
   }
 });
 
 router.get('/users/logout', function(req,res){
+  console.log("User log out successful.");
+  var user={
+    "email": "null"
+  }
+  active_account="hey3";
   res.status(200);
   res.setHeader('Content-Type', 'text/html');
-  res.render('index', {account_active: 0});
+  res.render('index', {user});
 });
 
 module.exports = router;
+// module.exports = active_account;

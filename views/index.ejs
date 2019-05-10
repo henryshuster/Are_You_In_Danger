@@ -7,16 +7,17 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
+    <link rel="shortcut icon" type="image/png" href="../../images/warning_logo.png"/>
     <title>Are You In Danger?</title>
 
     <meta charset='utf-8' />
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.css' rel='stylesheet' />
+    <link rel="stylesheet" href="../css/style.css">
     <style>
-    body { margin:0; padding:0; }
-    #map { position:absolute; top:0; bottom:0; width:100%; }
+      body { margin:0; padding:0; }
+      #map { position:absolute; top:0; bottom:0; width:100%; }
     </style>
   </head>
 
@@ -24,39 +25,47 @@
     <header>
       <!-- Fixed navbar -->
       <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-        <a class="navbar-brand" href="/">Are You in Danger?</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarCollapse">
-          <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="/">Home<span class="sr-only">(current)</span></a>
-            </li>
-            <%if (account_active==1){%>
+        <%if (user.email=="null"){%>
+          <a class="navbar-brand" href="/">Are You in Danger?</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav mr-auto">
               <li class="nav-item">
-                <a class="nav-link" href="/incident/shooting/:id">SHOOTING INCIDENT (TEMPORARY!)</a>
+                <a class="nav-link" href="/">Home<span class="sr-only">(current)</span></a>
               </li>
+        <%} else{%>
+          <a class="navbar-brand" href="/home/<%=user.email%>">Are You in Danger?</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav mr-auto">
               <li class="nav-item">
-                <a class="nav-link" href="/incident/arrest/:id">ARREST INCIDENT (TEMPORARY!)</a>
+                <a class="nav-link" href="/home/<%=user.email%>">Home<span class="sr-only">(current)</span></a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/users/logout">Log Out</a>
-              </li>
-            <%} else if(account_active==0){%>
+        <%}%>
+
+            <%if (user.email=="null"){%>
               <li class="nav-item">
                 <a class="nav-link" href="/users/create">New User</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="/users/login">Log In</a>
               </li>
+            <%} else{%>
               <li class="nav-item">
-                <a class="nav-link" href="/incident/shooting/:id">SHOOTING INCIDENT (TEMPORARY!)</a>
+                <a class="nav-link" href="/incident/<%=user.email%>/shooting">Nearest Shooting</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="/incident/arrest/:id">ARREST INCIDENT (TEMPORARY!)</a>
+                <a class="nav-link" href="/incident/<%=user.email%>/arrest/">Nearest Arrest</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/users/logout">Log Out</a>
               </li>
             <%}%>
+
           </ul>
           <!-- <form class="form-inline mt-2 mt-md-0">
             <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
@@ -73,11 +82,32 @@
       <div class="container">
         <h1 class="mt-5">Are You in Danger?</h1>
         <p class="lead">Mapping New York Police Department Shootings and Arrests in Manhattan</p>
-        <p>Visualized below is a heat map of all arrests reported by the NYPD. Black dots indicate locations of shooting incidents as reported by the NYPD. Click on a black data to see more specific information regarding the shooting. Click anywhere else on the map and then press "See Incident" to see more specific information regarding the closest arrest.</p>
+        <%if (user.email=="null"){%>
+          <p>Visualized below is a heat map of all arrests reported by the NYPD. Black dots indicate locations of shooting incidents as reported by the NYPD.</p>
+          <p>Log in or create an account to access the app's full functionality.</p>
+        <%} else{%>
+          <p>Visualized below is a heat map of all arrests reported by the NYPD. Black dots indicate locations of shooting incidents as reported by the NYPD. Click on a black data to see more specific information regarding the shooting. Click anywhere else on the map and then press "See Incident" to see more specific information regarding the closest arrest.</p>
+        <%}%>
+        <form action="/incident/<%=user.email%>/arrest" method="post">
+          <input type="text" class="form-control" id="longitude_input" name="longitude" text-anchor="middle" style="width: 100%;" placeholder="longitude">
+          <input type="text" class="form-control" id="latitude_input" name="latitude" style="width: 100%;" placeholder="latitude">
+          <button id ="access_incident_button" type="submit" class="btn btn-secondary">Go To Incident</button>
+        </form>
       </div>
 
-      <div id='map'></div>
+      <!-- <div id="access_incident">
+        <button type="button" id="access_incident_button" onclick="loadIncident()">Go To Incident</button>
+      </div> -->
 
+
+
+      <div id='map'></div>
+      <pre id='info'></pre>
+      <div class="br buffer">
+      <svg width="100%" height="715">
+        <rect width="100%" height="715" style="fill:rgb(255)" />
+      </svg>
+      </div>
       <div class="container">
         <p>Developed by: Tyler Masuyama, Brawner Quan, and Henry Shuster.</p>
       </div>
@@ -90,9 +120,22 @@
     <style>
       #map {
         margin: 0px auto;
-        margin-top: 320px;
+        margin-top: 450px;
         width: 100%;
         height: 660px;
+      }
+      #info {
+        display: block;
+        position: relative;
+        margin: 0px auto;
+        width: 50%;
+        padding: 10px;
+        border: none;
+        border-radius: 3px;
+        font-size: 12px;
+        text-align: center;
+        color: #222;
+        background: #fff;
       }
     </style>
 
@@ -100,11 +143,23 @@
     <script>
       mapboxgl.accessToken = 'pk.eyJ1IjoiYnJhd25lcmJveSIsImEiOiJjam5udWY5OTQwMjVrM3JvY2NyNGtkYmkwIn0.9FLrzon784t4Tx7CSIBHTQ';
       const map = new mapboxgl.Map({
-      container: 'map',
-      style: 'mapbox://styles/brawnerboy/cjvhftmci0exp1cseuw7a1wtc',
-      center: [-73.967981, 40.785899],
-      zoom: 15.0
+        container: 'map',
+        style: 'mapbox://styles/brawnerboy/cjvhftmci0exp1cseuw7a1wtc',
+        center: [-73.967981, 40.785899],
+        zoom: 15.0
       });
+      map.on('mousemove', function (e) {
+            document.getElementById('info').innerHTML =
+            // e.point is the x, y coordinates of the mousemove event relative
+            // to the top-left corner of the map
+            JSON.stringify(e.point) + '<br />' +
+            // e.lngLat is the longitude, latitude geographical position of the event
+            JSON.stringify(e.lngLat);
+            });
+      map.on('click', function (f) {
+            console.log(JSON.stringify(f.lngLat));
+            document.getElementById('longitude_input').value = JSON.stringify(f.lngLat);
+            });
     </script>
   </body>
 </html>
