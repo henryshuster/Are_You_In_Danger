@@ -33,7 +33,7 @@ class incident{
 exports.rows = function(callback){
   doc.useServiceAccountAuth(creds, function (err) {
 
-    var rows = doc.getRows(1, function (err, rows) {
+    var rows = doc.getRows(2, function (err, rows) {
 
     //  console.log(rows);
 
@@ -89,34 +89,46 @@ exports.getbyBoro = function(borough, callback){
 });
 }
 
-exports.getClosestShooting = function(latitude, longitude, callback){
-  console.log("START FINDING SHOOTINGS: "+latitude+", "+longitude);
+exports.getClosestArrest = function(latitude, longitude, callback){
+  console.log("START FINDING ARRESTS: "+latitude+", "+longitude);
   var incident = {};
+  // var all_users = Data.loadGoogle(2, function(all_users) {
+  //   for(var i=0; i<all_users.length; i++){
+  //     if(all_users[i].name==user_id.trim()){
+  //       user = all_users[i];
+  //       break;
+  //     }
+  //   }
+  //   console.log("Villains.getVillain, got villain: "+user_id);
+  //   callback(user);
+  // });
     exports.rows(function(rows){
-    for(var i = 0; i <rows.length; i++){//DO SHOOTING FIRST
-        if(Math.abs(latitude-rows[i].latitude) < 0.0005){
-          if(Math.abs(longitude-rows[i].longitude) < 0.0005){
+    console.log(rows.length)
+    for(var i = 0; i <rows.length; i++){
+      console.log(rows[i].latitude+", "+rows[i].longitude);
+        if(Math.abs(latitude-rows[i].latitude) < 0.003){
+          if(Math.abs(longitude-rows[i].longitude) < 0.003){
             // console.log(Math.abs(latitude-rows[i].latitude)+", "+Math.abs(longitude-rows[i].longitude));
             incident = {
-              "incidentkey": rows[i].incidentkey,
-              "occurdate": rows[i].occurdate,
+              "incidentkey": rows[i].arrestkey,
+              "occurdate": rows[i].arrestdate,
               "boro": rows[i].boro,
-              "death": rows[i].death,
+              "offense": rows[i].ofnsdesc,
               "latitude": rows[i].latitude,
               "longitude": rows[i].longitude}
-            console.log("SHOOTING FOUND:" + JSON.stringify(incident));
+            console.log("ARREST FOUND:" + JSON.stringify(incident));
             break;
           }
         }
     }
      if(isEmpty(incident)){
-      console.log("COULD NOT FIND SHOOTING");
+      console.log("COULD NOT FIND ARREST");
       callback(
         {
           "incidentkey": "",
           "occurdate": "",
           "boro": "",
-          "death": "",
+          "offense": "",
           "latitude": "",
           "longitude": ""}
       );

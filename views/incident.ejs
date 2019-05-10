@@ -54,9 +54,9 @@
       <div class="container">
         <h1 class="mt-5">Are You in Danger?</h1>
         <%if (incident_type==0){%>
-            <p class="lead">Shooting #XXX</p>
+            <p class="lead">Shooting #<%=incident_found.incidentkey%></p>
         <%}else if(incident_type==1){%>
-            <p class="lead">Arrest #XXX</p>
+            <p class="lead">Arrest #<%=incident_found.incidentkey%></p>
         <%}%>
         <%if (save_feedback==1){%>
             <div id="feedback" class = "positive">
@@ -68,39 +68,39 @@
           <div class="media text-muted pt-3">
             <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
               <strong class="d-block text-gray-dark">Incident Key:</strong>
-              Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.
+              <%=incident_found.incidentkey%>
             </p>
           </div>
           <div class="media text-muted pt-3">
             <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
               <strong class="d-block text-gray-dark">Latitude: </strong>
-              Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.
+              <%=incident_found.latitude%>
             </p>
           </div>
           <div class="media text-muted pt-3">
             <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
               <strong class="d-block text-gray-dark">Longitude: </strong>
-              Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.
+              <%=incident_found.longitude%>
             </p>
           </div>
           <div class="media text-muted pt-3">
             <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
               <strong class="d-block text-gray-dark">Date:</strong>
-              Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.
+              <%=incident_found.occurdate%>
             </p>
           </div>
           <%if (incident_type==0){%>
             <div class="media text-muted pt-3">
               <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
                 <strong class="d-block text-gray-dark">Death:</strong>
-                Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.
+                <%=incident_found.death%>
               </p>
             </div>
           <%} else if (incident_type==1){%>
             <div class="media text-muted pt-3">
               <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
                 <strong class="d-block text-gray-dark">Offense:</strong>
-                Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.
+                <%=incident_found.offense%>
               </p>
             </div>
           <%}%>
@@ -112,6 +112,32 @@
         <p>Developed by: Tyler Masuyama, Brawner Quan, and Henry Shuster.</p>
       </div>
     </main>
+
+    <style>
+      #feedback{
+        height: 22px;
+        font-weight: bold;
+        font-size: 12px;
+        text-align: left;
+        padding:5px;
+      }
+      .negative {
+        background-color: #ffb7b2;
+        border-left-style: solid;
+        border-color: red;
+      }
+      .positive {
+        background-color: #abeab6;
+        border-left-style: solid;
+        border-color: green;
+      }
+      .hidden{
+        display: none;
+      }
+      .visible{
+        display:block;
+      }
+    </style>
 
     <script>
       document.getElementById("save_incident_button").addEventListener("click",function(){

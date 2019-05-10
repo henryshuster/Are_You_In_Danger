@@ -81,12 +81,15 @@
           <p>Log in or create an account to access the app's full functionality.</p>
         <%} else{%>
           <p>Visualized below is a heat map of all arrests reported by the NYPD. Black dots indicate locations of shooting incidents as reported by the NYPD. Click on a black data to see more specific information regarding the shooting. Click anywhere else on the map and then press "See Incident" to see more specific information regarding the closest arrest.</p>
-          <form action="/incident/<%=user.email%>/shooting" method="post">
+          <form action="/incident/<%=user.email%>/find_incident" method="post">
             <%if (coord_feedback==-1){%>
               <div id="feedback" class = "negative">
                 Choose a coordinate point to look up by clicking on the map before requesting data for the nearest incident.
               </div>
-            <%} else{%>
+            <%} else if(coord_feedback==2){%>
+              <div id="feedback" class = "negative">
+                Couldn't find a closest incident. Try again.
+              </div>
             <%}%>
             <input type="text" class="form-control" onkeypress="return false;" id="longitude_input" name="longitude" text-anchor="middle" style="width: 100%;" placeholder="Longitude">
             <input type="text" class="form-control" onkeypress="return false;" id="latitude_input" name="latitude" style="width: 100%;" placeholder="Latitude">
@@ -224,9 +227,6 @@
             console.log(JSON.stringify(f.lngLat));
             document.getElementById('longitude_input').value = f.lngLat.lng;
             document.getElementById('latitude_input').value = f.lngLat.lat;
-            console.log(JSON.stringify(f.lngLat));
-            document.getElementById('longitude_input_hidden').value = f.lngLat.lng;
-            document.getElementById('latitude_input_hidden').value = f.lngLat.lat;
       });
     </script>
   </body>
