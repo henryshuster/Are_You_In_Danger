@@ -75,9 +75,23 @@
         <p class="lead">Mapping New York Police Department Shootings and Arrests in Manhattan</p>
         <p>Visualized below is a heat map of all arrests reported by the NYPD. Black dots indicate locations of shooting incidents as reported by the NYPD. Click on a black data to see more specific information regarding the shooting. Click anywhere else on the map and then press "See Incident" to see more specific information regarding the closest arrest.</p>
       </div>
-
+      <style type='text/css'>
+          #info {
+          display: block;
+          position: relative;
+          margin: 0px auto;
+          width: 50%;
+          padding: 10px;
+          border: none;
+          border-radius: 3px;
+          font-size: 12px;
+          text-align: center;
+          color: #222;
+          background: #fff;
+          }
+  </style>
       <div id='map'></div>
-
+      <pre id='info'></pre>
       <div class="container">
         <p>Developed by: Tyler Masuyama, Brawner Quan, and Henry Shuster.</p>
       </div>
@@ -97,6 +111,7 @@
     </style>
 
 
+
     <script>
       mapboxgl.accessToken = 'pk.eyJ1IjoiYnJhd25lcmJveSIsImEiOiJjam5udWY5OTQwMjVrM3JvY2NyNGtkYmkwIn0.9FLrzon784t4Tx7CSIBHTQ';
       const map = new mapboxgl.Map({
@@ -105,6 +120,32 @@
       center: [-73.967981, 40.785899],
       zoom: 15.0
       });
+      map.on('click', function(e) {
+          var features = map.queryRenderedFeatures(e.point, {
+            layers: ['shootingdata'] // replace this with the name of the layer
+          });
+
+          if (!features.length) {
+            return;
+          }
+
+          var feature = features[0];
+
+          var popup = new mapboxgl.Popup({ offset: [0, -15] })
+            .setLngLat(feature.geometry.coordinates)
+            .setHTML("'<h3>' + Incident no: feature.properties.INCIDENT_KEY + '</h3><p>' + Incident Date: feature.properties.OCCUR_DATE + '<br>' + Death: feature.properties.OCCUR_DATE + '</p>'")
+            .setLngLat(feature.geometry.coordinates)
+            .addTo(map);
+        });
+
+        map.on('mousemove', function (e) {
+            document.getElementById('info').innerHTML =
+            // e.point is the x, y coordinates of the mousemove event relative
+            // to the top-left corner of the map
+            JSON.stringify(e.point) + '<br />' +
+            // e.lngLat is the longitude, latitude geographical position of the event
+            JSON.stringify(e.lngLat);
+            });
     </script>
   </body>
 </html>
