@@ -28,7 +28,7 @@ app.get('/', function(request, response){
   console.log(user.email);
   response.status(200);
   response.setHeader('Content-Type', 'text/html')
-  response.render('index', {user});
+  response.render('index', {user, coord_feedback: 0});
 });
 
 app.get('/home/:id', function(request, response){
@@ -39,5 +39,5 @@ app.get('/home/:id', function(request, response){
   }
   response.status(200);
   response.setHeader('Content-Type', 'text/html')
-  response.render('index', {user});
+  response.render('index', {user, coord_feedback: 0});
 });

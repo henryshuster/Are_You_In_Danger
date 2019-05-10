@@ -35,7 +35,7 @@ router.post('/users/create/redirect', function(req,res){
     active_account=user.email;
     res.status(200);
     res.setHeader('Content-Type', 'text/html');
-    res.render('index', {user});
+    res.render('index', {user, coord_feedback: 0});
   }
 });
 
@@ -57,7 +57,7 @@ router.post('/users/login/redirect', function(req,res){
     active_account=user.email;
     res.status(200);
     res.setHeader('Content-Type', 'text/html');
-    res.render('index', {user});
+    res.render('index', {user, coord_feedback: 0});
   }
 });
 
@@ -69,7 +69,7 @@ router.get('/users/logout', function(req,res){
   active_account="hey3";
   res.status(200);
   res.setHeader('Content-Type', 'text/html');
-  res.render('index', {user});
+  res.render('index', {user, coord_feedback: 0});
 });
 
 module.exports = router;

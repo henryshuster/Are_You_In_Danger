@@ -56,12 +56,6 @@
               </li>
             <%} else{%>
               <li class="nav-item">
-                <a class="nav-link" href="/incident/<%=user.email%>/shooting">Nearest Shooting</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/incident/<%=user.email%>/arrest">Nearest Arrest</a>
-              </li>
-              <li class="nav-item">
                 <a class="nav-link" href="/users/logout">Log Out</a>
               </li>
             <%}%>
@@ -88,6 +82,12 @@
         <%} else{%>
           <p>Visualized below is a heat map of all arrests reported by the NYPD. Black dots indicate locations of shooting incidents as reported by the NYPD. Click on a black data to see more specific information regarding the shooting. Click anywhere else on the map and then press "See Incident" to see more specific information regarding the closest arrest.</p>
           <form action="/incident/<%=user.email%>/shooting" method="post">
+            <%if (coord_feedback==-1){%>
+              <div id="feedback" class = "negative">
+                Choose a coordinate point to look up by clicking on the map before requesting data for the nearest incident.
+              </div>
+            <%} else{%>
+            <%}%>
             <input type="text" class="form-control" onkeypress="return false;" id="longitude_input" name="longitude" text-anchor="middle" style="width: 100%;" placeholder="Longitude">
             <input type="text" class="form-control" onkeypress="return false;" id="latitude_input" name="latitude" style="width: 100%;" placeholder="Latitude">
             <button id ="access_incident_button" type="submit" class="btn btn-secondary">Go To Nearest Incident</button>
@@ -177,6 +177,31 @@
       </style>
     <%}%>
 
+    <style>
+      #feedback{
+        height: 22px;
+        font-weight: bold;
+        font-size: 12px;
+        text-align: left;
+        padding:5px;
+      }
+      .negative {
+        background-color: #ffb7b2;
+        border-left-style: solid;
+        border-color: red;
+      }
+      .positive {
+        background-color: #abeab6;
+        border-left-style: solid;
+        border-color: green;
+      }
+      .hidden{
+        display: none;
+      }
+      .visible{
+        display:block;
+      }
+    </style>
 
 
     <script>
@@ -194,7 +219,7 @@
             "<br>Longitude: "+e.lngLat.lng+", "+
             // e.lngLat is the longitude, latitude geographical position of the event
             "Latitude: "+e.lngLat.lat+"<br>";
-            });
+      });
       map.on('click', function (f) {
             console.log(JSON.stringify(f.lngLat));
             document.getElementById('longitude_input').value = f.lngLat.lng;
@@ -202,7 +227,7 @@
             console.log(JSON.stringify(f.lngLat));
             document.getElementById('longitude_input_hidden').value = f.lngLat.lng;
             document.getElementById('latitude_input_hidden').value = f.lngLat.lat;
-            });
+      });
     </script>
   </body>
 </html>
