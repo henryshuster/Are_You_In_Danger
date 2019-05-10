@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-
+var auth = require('../models/auth');
 var active_account="hey2";
 
 router.get('/users/create', function(req,res){
@@ -32,6 +32,7 @@ router.post('/users/create/redirect', function(req,res){
   }
   else{
     console.log("New user: "+user.email);
+    //add user to database
     active_account=user.email;
     res.status(200);
     res.setHeader('Content-Type', 'text/html');
@@ -52,13 +53,23 @@ router.post('/users/login/redirect', function(req,res){
     res.setHeader('Content-Type', 'text/html');
     res.render('account', {input_type: 1, feedback:-1});//finish feedback
   }
+  //checking if user exists
   else{
-    console.log("User log in successful: "+user.email);
-    active_account=user.email;
-    res.status(200);
-    res.setHeader('Content-Type', 'text/html');
-    res.render('index', {user, coord_feedback: 0});
-  }
+      auth.authUser(user,function(return){
+     if(return == true){
+      console.log("User log in successful: "+user.email);
+      active_account=user.email;
+      res.status(200);
+      res.setHeader('Content-Type', 'text/html');
+      res.render('index', {user, coord_feedback: 0});
+    }
+    else{
+      console.log("User log in unsuccessful: "+user.email);
+      //unsuccessful login respond appropriately
+    }
+  });
+}
+
 });
 
 router.get('/users/logout', function(req,res){

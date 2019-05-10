@@ -2,7 +2,7 @@ var express = require('express');
 var app = express.Router();
 
 var global_incident_type;
-
+var auth = require('../models/auth');
 var Shootings = require('../models/shooting');
 var Arrests = require('../models/arrest');
 var latest_incident;
@@ -105,13 +105,19 @@ app.get('/incident/:id/:longitude/:latitude/save', function(request,response){
   var user={
     "email": request.params.id,
     "longitude": request.params.longitude,
-    "latitude": request.params.latitude
+    "latitude": request.params.latitude,
+    "datasave": JSON.stringify(latest_incident)
+
   }
   var incident_found=latest_incident;
+
+  //save the incident found to database
+  auth.dataSave(user,function(){
   console.log("INCIDENT: "+JSON.stringify(incident_found));
   response.status(200);
   response.setHeader('Content-Type', 'text/html')
   response.render('incident', {user, incident_found, incident_type: global_incident_type, save_feedback: 1});
+});
 });
 
 
