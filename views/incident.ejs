@@ -115,7 +115,7 @@
 
     <script>
       document.getElementById("save_incident_button").addEventListener("click",function(){
-        document.location.href = '/incident/save';
+        document.location.href = '/incident/<%=user.email%>/<%=user.latitude%>/<%=user.longitude%>/save';
       });
     </script>
 
