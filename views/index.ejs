@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
     <title>Are You In Danger?</title>
-      
+
     <meta charset='utf-8' />
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.js'></script>
@@ -17,7 +17,7 @@
     <style>
     body { margin:0; padding:0; }
     #map { position:absolute; top:0; bottom:0; width:100%; }
-    </style>  
+    </style>
   </head>
 
   <body class="d-flex flex-column h-100">
@@ -33,12 +33,30 @@
             <li class="nav-item">
               <a class="nav-link" href="/">Home<span class="sr-only">(current)</span></a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/users/create">New User</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/users/login">Log In</a>
-            </li>
+            <%if (account_active==1){%>
+              <li class="nav-item">
+                <a class="nav-link" href="/incident/shooting/:id">SHOOTING INCIDENT (TEMPORARY!)</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/incident/arrest/:id">ARREST INCIDENT (TEMPORARY!)</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/users/logout">Log Out</a>
+              </li>
+            <%} else if(account_active==0){%>
+              <li class="nav-item">
+                <a class="nav-link" href="/users/create">New User</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/users/login">Log In</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/incident/shooting/:id">SHOOTING INCIDENT (TEMPORARY!)</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/incident/arrest/:id">ARREST INCIDENT (TEMPORARY!)</a>
+              </li>
+            <%}%>
           </ul>
           <!-- <form class="form-inline mt-2 mt-md-0">
             <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
@@ -54,42 +72,39 @@
       <br>
       <div class="container">
         <h1 class="mt-5">Are You in Danger?</h1>
-        <p class="lead">Mapping New York Police Department Shootings and Arrests</p>
-        <p>Description....</p>
-      </div>
-      <div id="sketch-holder">
-
+        <p class="lead">Mapping New York Police Department Shootings and Arrests in Manhattan</p>
+        <p>Visualized below is a heat map of all arrests reported by the NYPD. Black dots indicate locations of shooting incidents as reported by the NYPD. Click on a black data to see more specific information regarding the shooting. Click anywhere else on the map and then press "See Incident" to see more specific information regarding the closest arrest.</p>
       </div>
 
-      <br>
+      <div id='map'></div>
+
       <div class="container">
         <p>Developed by: Tyler Masuyama, Brawner Quan, and Henry Shuster.</p>
       </div>
     </main>
 
-
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.8.0/p5.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/mappa-mundi/dist/mappa.min.js" type="text/javascript"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <!-- <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap"async defer></script> -->
-    <script src="/js/mapstuff.js"></script>
-
-
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-      
-      
-    <div id='map'></div>
+
+    <style>
+      #map {
+        margin: 0px auto;
+        margin-top: 320px;
+        width: 100%;
+        height: 660px;
+      }
+    </style>
+
+
     <script>
-    mapboxgl.accessToken = 'pk.eyJ1IjoiYnJhd25lcmJveSIsImEiOiJjam5udWY5OTQwMjVrM3JvY2NyNGtkYmkwIn0.9FLrzon784t4Tx7CSIBHTQ';
-    const map = new mapboxgl.Map({
-    container: 'map',
-    style: 'mapbox://styles/brawnerboy/cjvhftmci0exp1cseuw7a1wtc',
-    center: [-73.967981, 40.785899],
-    zoom: 15.0
-    });
-    </script>  
+      mapboxgl.accessToken = 'pk.eyJ1IjoiYnJhd25lcmJveSIsImEiOiJjam5udWY5OTQwMjVrM3JvY2NyNGtkYmkwIn0.9FLrzon784t4Tx7CSIBHTQ';
+      const map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/brawnerboy/cjvhftmci0exp1cseuw7a1wtc',
+      center: [-73.967981, 40.785899],
+      zoom: 15.0
+      });
+    </script>
   </body>
 </html>

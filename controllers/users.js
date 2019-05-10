@@ -61,7 +61,7 @@ router.post('/users/:id/login', function(req,res){
 router.get('/users/logout', function(req,res){
   res.status(200);
   res.setHeader('Content-Type', 'text/html');
-  res.render('account');
+  res.render('index', {account_active: 0});
 });
 
 module.exports = router;

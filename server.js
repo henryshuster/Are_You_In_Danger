@@ -6,6 +6,7 @@ var app = express();
 var port = 3000;
 
 app.use(require('./controllers/users'));
+app.use(require('./controllers/incidents'));
 
 app.use(express.static('public'));
 app.set('views', __dirname + '/views');
@@ -21,17 +22,12 @@ app.get('/', function(request, response){
   console.log('GET Request- Index');
   response.status(200);
   response.setHeader('Content-Type', 'text/html')
-  response.render('index');
+  response.render('index', {account_active: 0});
 });
 
-app.get('/incident/:id', function(request,response){
+app.get('/home', function(request, response){
+  console.log('GET Request- Index');
   response.status(200);
   response.setHeader('Content-Type', 'text/html')
-  response.render('incident');
-});
-
-app.get('/save', function(request,response){
-  response.status(200);
-  response.setHeader('Content-Type', 'text/html')
-  response.render('incident');
+  response.render('index', {account_active: 1});
 });
