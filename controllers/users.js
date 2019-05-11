@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var auth = require('../models/auth');
+var Auth = require('../models/auth');
 var active_account="hey2";
 
 router.get('/users/create', function(req,res){
@@ -31,12 +31,23 @@ router.post('/users/create/redirect', function(req,res){
     res.render('account', {input_type: 0, feedback:-1});//finish feedback
   }
   else{
-    console.log("New user: "+user.email);
-    //add user to database
-    active_account=user.email;
-    res.status(200);
-    res.setHeader('Content-Type', 'text/html');
-    res.render('index', {user, coord_feedback: 0});
+    Auth.getUser(user, function(userRetrieved){
+      if(user.email==user.Retrieved){
+        console.log("Email already in use")
+        res.status(200);
+        res.setHeader('Content-Type', 'text/html');
+        res.render('account', {input_type: 0, feedback:-3});
+      }
+      else{
+        console.log("New user: "+user.email);
+        Auth.createUser(user, function(){
+          active_account=user.email;
+          res.status(200);
+          res.setHeader('Content-Type', 'text/html');
+          res.render('index', {user, coord_feedback: 0});
+        });
+      }
+    });
   }
 });
 
@@ -55,8 +66,8 @@ router.post('/users/login/redirect', function(req,res){
   }
   //checking if user exists
   else{
-      auth.authUser(user,function(return){
-     if(return == true){
+    Auth.getUser(user,function(userRetrieved){
+    if(user.email == userRetrieved.email&&user.password == userRetrieved.password){
       console.log("User log in successful: "+user.email);
       active_account=user.email;
       res.status(200);
@@ -65,7 +76,9 @@ router.post('/users/login/redirect', function(req,res){
     }
     else{
       console.log("User log in unsuccessful: "+user.email);
-      //unsuccessful login respond appropriately
+      res.status(200);
+      res.setHeader('Content-Type', 'text/html');
+      res.render('account', {input_type: 1, feedback: -2});
     }
   });
 }

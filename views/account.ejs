@@ -88,6 +88,10 @@
             <div id="feedback" class = "negative">
               Please fill in an email and password to continue.
             </div>
+          <%} else if(feedback==-2){%>
+            <div id="feedback" class = "negative">
+              Wrong email or password. Try again.
+            </div>
           <%}%>
           <%if (input_type==0){%>
             <form action="/users/create/redirect" method="post">
