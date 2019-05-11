@@ -72,18 +72,16 @@ exports.saveData = function(user,callback){
   exports.rows(function(rows){
     for(var i = 0; i <rows.length; i++){ //check to see if this needs to be -1
       if(rows[i].email == user.email){
-			     console.log(rows[i]);
+			     
            rows[i].datasave = user.datasave;
+           console.log("TESTING BRAWNER" + rows[i]);
 					 rows[i].save();
-				   if (callback) {
-					       callback();}
+          if(callback)
+              callback();
+		
       }
     }
-  if(isEmpty(user)){
-      console.log("user does not exist");
-      callback(false);
-  }else
-    callback(true);
+ 
   });
 }
 

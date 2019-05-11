@@ -70,7 +70,7 @@ app.get('/incident/:id/:longitude/:latitude/save', function(request,response){
   var incident_found=latest_incident;
 
   //save the incident found to database
-  Auth.updateUser(user,incident_found,function(){
+  Auth.saveData(user,function(){
   console.log("INCIDENT: "+JSON.stringify(incident_found));
   response.status(200);
   response.setHeader('Content-Type', 'text/html')
